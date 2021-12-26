@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@emotion/react";
-import { Container, createTheme, CssBaseline, Typography } from "@mui/material"; 
+import { Container, createTheme, CssBaseline  } from "@mui/material"; 
 import { useState } from "react";
 import Catalog from "../../features/catalog/Catalog"; 
 import Header from "./Header";
@@ -10,16 +10,21 @@ function App() {
   const paletteType=darkMode ? 'dark' : 'light'
   const theme=createTheme({
     palette:{
-      mode:paletteType
+      mode:paletteType,
+      background:{default: paletteType==='light' ? '#eaeaea':'#121212' }
     }
   })
+
+  function handleThemeChange(){
+    setDarkMode(!darkMode);
+  }
 
    
   return (
     <>
     <ThemeProvider theme={theme} >
         <CssBaseline />
-        <Header   />
+        <Header darkMode={darkMode} handleThemeChange={handleThemeChange}   />
         <Container>
           <Catalog   />
         </Container>
