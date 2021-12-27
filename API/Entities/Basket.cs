@@ -10,7 +10,7 @@ namespace API.Entities
         public int Id { get; set; }
         public string buyerId { get; set; }//autogen id for tracking whhich basket belongs to who 
 
-        //basketId-BasketItemId=>1:n
+        //basketId-BasketItemId===>1:n
         public List<BasketItem> Items { get; set; } = new();//===new List<BasketItem>();
 
         public void AddItem(Product product, int quantity)

@@ -19,8 +19,8 @@ namespace API
           var logger=scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
           try
           {
-             // context.Database.Migrate();
-             // DbInitializer.Initialize(context);
+              context.Database.Migrate();
+              DbInitializer.Initialize(context);
           }
           catch(Exception ex)
           {
