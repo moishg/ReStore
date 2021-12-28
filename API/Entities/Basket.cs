@@ -24,15 +24,15 @@ namespace API.Entities
                     Quantity = quantity
                 };
 
-                Items.Add(basketItem);
-
-                BasketItem existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
+                Items.Add(basketItem);               
+            }
+            else 
+            {
+                 BasketItem existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
                 if (existingItem != null)
                 {
                     existingItem.Quantity += quantity;
                 }
-
-
             }
         }
 

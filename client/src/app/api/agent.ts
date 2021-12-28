@@ -6,6 +6,7 @@ import {history} from "../..";
 const sleep =()=>new Promise(resolve=>setTimeout(resolve,500));
 
 axios.defaults.baseURL='http://localhost:5003/api/';
+axios.defaults.withCredentials=true;//the briowser will receive the cookie and set it in the app storage 
 
 const  responseBody=(response:AxiosResponse)=>response.data;
 
@@ -68,9 +69,17 @@ const TestErrors={
 
 }
 
+const Basket={
+    get:()=>requests.get('basket'),
+    addItem: (productId:number, quantity=1)=>requests.post(`basket?productId=${productId}&quantity=${quantity}`,{}),
+    removeItem: (productId:number, quantity=1)=>requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
+
+}
+
 const agent={
     Catalog,
-    TestErrors
+    TestErrors,
+    Basket
 }
 
 
