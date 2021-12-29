@@ -1,9 +1,14 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
+import { useEffect } from "react";
 import { BasketItem, BasketSummaryProps } from "../../app/models/basket";
 
 export default function BasketSummary({basketItems}:BasketSummaryProps) {
-    const subtotal = 0;
+    let subtotal = 0;
     const deliveryFee = 0;
+    useEffect(()=>{
+        basketItems.map((item,index)=>subtotal+=item.price*item.quantity);
+
+      },[])
 
     return (
         <>
