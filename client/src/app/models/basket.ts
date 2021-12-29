@@ -16,4 +16,8 @@
         items: BasketItem[];
     }
 
+    export interface BasketSummaryProps{
+        basketItems: BasketItem[];
+    }
+
  

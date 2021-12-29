@@ -20,7 +20,7 @@ import agent from "../api/agent";
 import LoadingComponent from "./LoadingComponent";
 
 
-function App() {    
+export default function App() {    
 const {setBasket}=useStoreContext();
 const [loading,setLoading]=useState(true);
 
@@ -31,6 +31,10 @@ useEffect(()=>{
     .then(basket=>setBasket(basket))
     .catch(error=>console.log(error))
     .finally(()=>setLoading(false));
+  }
+  else 
+  {
+    setLoading(false);
   }
 },[setBasket])
 

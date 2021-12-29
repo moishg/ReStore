@@ -38,10 +38,10 @@ namespace API.Entities
 
         public void RemoveItem(int productId,int quantity)
         {
-            var item=Items.FirstOrDefault(item=>item.ProductId==productId);
+            var item=Items.FirstOrDefault(basketItem=>basketItem.Product.Id==productId);
             if(item==null)//productId not exists
             {
-                return; 
+                return;  
             }
             else//product exists
             {
