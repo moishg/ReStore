@@ -1,14 +1,28 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasketItem, BasketSummaryProps } from "../../app/models/basket";
 
 export default function BasketSummary({basketItems}:BasketSummaryProps) {
-    let subtotal = 0;
-    const deliveryFee = 0;
+    const  [subtotal,setSubTotal] = useState(0);
+    const  [deliveryFee,setDeliveryFee] = useState(0);
+    //let subtotal=0;
+     let deliveryPerItem=50;
     useEffect(()=>{
-        basketItems.map((item,index)=>subtotal+=item.price*item.quantity);
+        let totalOrderPrice=0;
+        let totalDelivery=0;
+        basketItems.map((item,index)=>{
+            totalOrderPrice+=item.price*item.quantity/100;
+            if(totalOrderPrice<1000)
+                totalDelivery+=deliveryPerItem ;
+            return totalOrderPrice ;
+        });
 
-      },[])
+          
+        console.log(totalOrderPrice) ;
+        setSubTotal(totalOrderPrice);
+        setDeliveryFee(totalDelivery);
+
+      })
 
     return (
         <>
