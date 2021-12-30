@@ -28,7 +28,7 @@ export function StoreProvider({ children }: PropsWithChildren<any>) {
             const items = [...basket.items];//create new instance(copy) of the items array and store it in the variable
             //react prefer copy the existing state array and then ovewrite the existing state with the new copy
 
-            const itemIndex = items.findIndex(i => i.productId == productId);
+            const itemIndex = items.findIndex(i => i.productId === productId);
             if (itemIndex >= 0) {
                 items[itemIndex].quantity -= quantity;
                 if (items[itemIndex].quantity === 0) {
