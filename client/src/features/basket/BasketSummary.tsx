@@ -1,8 +1,11 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useStoreContext } from "../../app/context/StoreContext";
 import { BasketItem, BasketSummaryProps } from "../../app/models/basket";
+import { currencyFormat } from "../../app/util/util";
 
 export default function BasketSummary({basketItems}:BasketSummaryProps) {
+    const {basket}=useStoreContext();
     const  [subtotal,setSubTotal] = useState(0);
     const  [deliveryFee,setDeliveryFee] = useState(0);
     //let subtotal=0;
@@ -10,8 +13,8 @@ export default function BasketSummary({basketItems}:BasketSummaryProps) {
     useEffect(()=>{
         let totalOrderPrice=0;
         let totalDelivery=0;
-        basketItems.map((item,index)=>{
-            totalOrderPrice+=item.price*item.quantity/100;
+        basket?.items.map((item,index)=>{
+            totalOrderPrice+=item.price*item.quantity;
             if(totalOrderPrice<1000)
                 totalDelivery+=deliveryPerItem ;
             return totalOrderPrice ;
@@ -31,15 +34,15 @@ export default function BasketSummary({basketItems}:BasketSummaryProps) {
                     <TableBody>
                         <TableRow>
                             <TableCell colSpan={2}>Subtotal</TableCell>
-                            <TableCell align="right">{subtotal}</TableCell>
+                            <TableCell align="left"> {currencyFormat(subtotal)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell colSpan={2}>Delivery fee*</TableCell>
-                            <TableCell align="right">{deliveryFee}</TableCell>
+                            <TableCell align="left">{currencyFormat(deliveryFee)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell colSpan={2}>Total</TableCell>
-                            <TableCell align="right">{subtotal + deliveryFee}</TableCell>
+                            <TableCell align="left">{currencyFormat(subtotal+deliveryFee)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
