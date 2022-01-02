@@ -2,10 +2,12 @@ import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typograph
 import { useEffect, useState } from "react";
 import { useStoreContext } from "../../app/context/StoreContext";
 import { BasketItem, BasketSummaryProps } from "../../app/models/basket";
+import { useAppSelector } from "../../app/store/configureStore";
 import { currencyFormat } from "../../app/util/util";
 
 export default function BasketSummary({basketItems}:BasketSummaryProps) {
-    const {basket}=useStoreContext();
+   // const {basket}=useStoreContext();
+   const  {basket} = useAppSelector(state=>state.basket );//selecting the "basket" redux state 
     const  [subtotal,setSubTotal] = useState(0);
     const  [deliveryFee,setDeliveryFee] = useState(0);
     //let subtotal=0;

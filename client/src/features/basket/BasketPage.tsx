@@ -5,23 +5,34 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import agent from "../../app/api/agent";
  
-import { useStoreContext } from "../../app/context/StoreContext"; 
+ 
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore"; 
+import { removeItem, setBasket } from "./basketSlice";
 import BasketSummary from "./BasketSummary";
  
 export default function BasketPage() {
     
-    const {basket,setBasket,removeItem}=useStoreContext();
+    //const {basket,setBasket,removeItem}=useStoreContext();     
     //const [loading,setLoading]=useState(false);
+
+    //using redux:
+    //1.selecting the "basket" redux state  
+    const  {basket} = useAppSelector(state=>state.basket );
+    //2.we also need dispatch to set basket after adding and removing the item:
+    const dispatch=useAppDispatch();
+
+    
     const [status,setStatus]=useState({
         loading:false,
         name:''
     });
 
     function handleAddItem(productId:number,name:string){
+            
             setStatus({loading:true,name});
 
             agent.Basket.addItem(productId)
-            .then(basket=>setBasket(basket))            
+            .then(basket => dispatch(setBasket(basket)))         
             .catch(error=>console.log(error))
             .finally(()=>setStatus({loading:true,name:''}))
     }
@@ -31,10 +42,9 @@ export default function BasketPage() {
        //setLoading(true);
         setStatus({loading:true,name});
 
-        //1.removing the item from the basket requirets 2 steps:
-      ///  debugger;
+        //1.removing the item from the basket requires 2 steps:       
         agent.Basket.removeItem(productId,quantity)//1.1.removing the item from the db
-         .then(()=>removeItem(productId,quantity))//1.2.removing the item from the storeContext            
+         .then(()=>dispatch(removeItem({productId,quantity})))//1.2.removing the item from the basket ,using the basket's redux
         .catch(error=>console.log(error))
         .finally(()=>setStatus({loading:true,name:''}))
     }

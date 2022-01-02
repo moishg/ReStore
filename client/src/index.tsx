@@ -6,12 +6,13 @@ import reportWebVitals from './reportWebVitals';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from "history";
 import { StoreProvider } from './app/context/StoreContext';
-import { configureStore } from './app/store/configureStore';
+ 
 import { Provider } from 'react-redux';
+ 
+import { store } from './app/store/configureStore';
 export const history = createBrowserHistory();
 
-//creating redux store 
-const store=configureStore();
+ 
 
  console.log(store.getState());//getting the data of the redux store
 //  {
@@ -22,11 +23,11 @@ const store=configureStore();
 ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
-      <StoreProvider>
+      {/* <StoreProvider>   -  for using the storeContext */}
         <Provider store={store}>
           <App />
         </Provider>
-      </StoreProvider>
+      {/* </StoreProvider> */}
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

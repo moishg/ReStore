@@ -3,6 +3,7 @@ import { ShoppingCart } from "@mui/icons-material";
 import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typography } from "@mui/material";
 import { Link, NavLink } from "react-router-dom";
 import { useStoreContext } from "../context/StoreContext";
+import { useAppSelector } from "../store/configureStore";
 
 
 interface HeaderProps{
@@ -34,7 +35,8 @@ const navStyles={
 
 export default function Header({darkMode,handleThemeChange}:HeaderProps ){
 
-    const{basket}=useStoreContext();
+    //const{basket}=useStoreContext(); 
+    const  {basket} = useAppSelector(state=>state.basket );//selecting the "basket" redux state  - only getting the data with no actions here
     const itemCount=basket?.items.reduce((sum,item)=>sum+item.quantity,0)
 
 

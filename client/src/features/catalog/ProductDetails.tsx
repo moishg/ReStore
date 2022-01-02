@@ -8,9 +8,15 @@ import { useStoreContext } from "../../app/context/StoreContext";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/product";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { removeItem, setBasket } from "../basket/basketSlice";
 export default function ProductDetails(){
     
-    const {basket,setBasket,removeItem} =useStoreContext();
+    //const {basket,setBasket,removeItem} =useStoreContext();
+    const  {basket} = useAppSelector(state=>state.basket );//selecting the "basket" redux state       
+    const dispatch=useAppDispatch();// for basket redux actions 
+    
+   
     const {id}=useParams<{id:string}>();
     const [product,setProduct]=useState<Product | null>(null);//product
     const [quantity,setQuantity]  =useState(0);///quantity - how many of the product items the user already have in the basket
@@ -18,6 +24,10 @@ export default function ProductDetails(){
     const [submitting,setSubmitting]=useState(false);//indicator for submitting the item  to api 
     const item= basket?.items.find(item=>item.productId===product?.id);
     //const item= basket?.items.find(item=>item.productId==parseInt(id));
+
+
+   
+
 
     useEffect(()=>{//callback
         // axios.get(`http://localhost:5003/api/products/${id}`)
@@ -49,7 +59,7 @@ export default function ProductDetails(){
         if(!item || quantity>item.quantity){
             const updatedQuantity= item ? (quantity - item.quantity) : quantity;
             agent.Basket.addItem(product?.id!,updatedQuantity)
-            .then(basket=>setBasket(basket))
+            .then(basket=>dispatch(setBasket(basket)))
             .catch(error=>console.log(error))
             .finally(()=>setSubmitting(false))            
         }
@@ -58,7 +68,8 @@ export default function ProductDetails(){
              const updatedQuantity= item.quantity - quantity;   
              console.log(quantity);
              agent.Basket.removeItem(product?.id!,updatedQuantity)
-             .then(()=>removeItem(product?.id!,updatedQuantity))
+             //.then(()=>removeItem(product?.id!,updatedQuantity))
+             .then(()=>dispatch(removeItem({productId:product?.id!,quantity:updatedQuantity})))//1.removing the item from the basket ,using the basket's redux
              .catch(error=>console.log(error))
              .finally(()=>setSubmitting(false))            
         }
