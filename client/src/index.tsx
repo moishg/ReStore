@@ -10,8 +10,14 @@ import { configureStore } from './app/store/configureStore';
 import { Provider } from 'react-redux';
 export const history = createBrowserHistory();
 
- const store=configureStore();
- console.log(store.getState());
+//creating redux store 
+const store=configureStore();
+
+ console.log(store.getState());//getting the data of the redux store
+//  {
+//   "data": 42,
+//   "title": "YARC(yet another redux counter)"
+// }
 
 ReactDOM.render(
   <React.StrictMode>
