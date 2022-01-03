@@ -23,7 +23,7 @@ export default function BasketSummary({basketItems}:BasketSummaryProps) {
         });
 
           
-        console.log(totalOrderPrice) ;
+       // console.log(totalOrderPrice) ;
         setSubTotal(totalOrderPrice);
         setDeliveryFee(totalDelivery);
 

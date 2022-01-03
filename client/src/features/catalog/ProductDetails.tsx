@@ -9,7 +9,7 @@ import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Product } from "../../app/models/product";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { removeItem, setBasket } from "../basket/basketSlice";
+import {  addBasketItemAsync, removeBasketItemAsync, setBasket } from "../basket/basketSlice";
 export default function ProductDetails(){
     
     //const {basket,setBasket,removeItem} =useStoreContext();
@@ -58,20 +58,13 @@ export default function ProductDetails(){
         //1st case: if item not exits or item.quantity==0
         if(!item || quantity>item.quantity){
             const updatedQuantity= item ? (quantity - item.quantity) : quantity;
-            agent.Basket.addItem(product?.id!,updatedQuantity)
-            .then(basket=>dispatch(setBasket(basket)))
-            .catch(error=>console.log(error))
-            .finally(()=>setSubmitting(false))            
+           dispatch(addBasketItemAsync({productId:product?.id!,quantity:updatedQuantity}));             
         }
         else //2.item exists : so need to update the quantity
         {
-             const updatedQuantity= item.quantity - quantity;   
-             console.log(quantity);
-             agent.Basket.removeItem(product?.id!,updatedQuantity)
-             //.then(()=>removeItem(product?.id!,updatedQuantity))
-             .then(()=>dispatch(removeItem({productId:product?.id!,quantity:updatedQuantity})))//1.removing the item from the basket ,using the basket's redux
-             .catch(error=>console.log(error))
-             .finally(()=>setSubmitting(false))            
+             const updatedQuantity= item.quantity - quantity;                                          
+             dispatch(removeBasketItemAsync({productId:product?.id!,quantity:updatedQuantity}));//1.removing the item from the basket ,using the basket's redux
+            
         }
     }
 

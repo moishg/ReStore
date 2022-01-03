@@ -14,7 +14,7 @@ export const history = createBrowserHistory();
 
  
 
- console.log(store.getState());//getting the data of the redux store
+ //console.log(store.getState());//getting the data of the redux store
 //  {
 //   "data": 42,
 //   "title": "YARC(yet another redux counter)"
