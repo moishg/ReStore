@@ -58,7 +58,9 @@ export default function ProductDetails(){
         //1st case: if item not exits or item.quantity==0
         if(!item || quantity>item.quantity){
             const updatedQuantity= item ? (quantity - item.quantity) : quantity;
-           dispatch(addBasketItemAsync({productId:product?.id!,quantity:updatedQuantity}));             
+           dispatch(addBasketItemAsync({productId:product?.id!,quantity:updatedQuantity}));        
+
+             
         }
         else //2.item exists : so need to update the quantity
         {
@@ -66,6 +68,8 @@ export default function ProductDetails(){
              dispatch(removeBasketItemAsync({productId:product?.id!,quantity:updatedQuantity}));//1.removing the item from the basket ,using the basket's redux
             
         }
+
+        setSubmitting(false);
     }
 
 

@@ -10,6 +10,7 @@ import { StoreProvider } from './app/context/StoreContext';
 import { Provider } from 'react-redux';
  
 import { store } from './app/store/configureStore';
+import { fetchProductsAsync } from './features/catalog/catalogSlice';
 export const history = createBrowserHistory();
 
  
@@ -19,6 +20,8 @@ export const history = createBrowserHistory();
 //   "data": 42,
 //   "title": "YARC(yet another redux counter)"
 // }
+
+store.dispatch(fetchProductsAsync());
 
 ReactDOM.render(
   <React.StrictMode>

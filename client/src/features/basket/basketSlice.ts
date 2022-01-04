@@ -26,7 +26,7 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, 
     }
 )
 
-export const removeBasketItemAsync = createAsyncThunk<void, { productId: number, quantity?: number }>(
+export const removeBasketItemAsync = createAsyncThunk<void, { productId: number, quantity: number,name?:string }>(
     'basket/removeBasketItemAsync',//function string identifier(type prefix)
     async ({ productId, quantity = 1 }) => {
         try {
@@ -63,7 +63,7 @@ export const basketSlice = createSlice({
         //cases for :ddBasketItemAsync async  method
         //-----------------------------------------
         builder.addCase(addBasketItemAsync.pending, (state, action) => {
-            // console.log(action);
+            //console.log(action);
             state.status = 'pendingAddItem' + action.meta.arg.productId;//setting the state status to "pending" state
         });
         builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
@@ -80,7 +80,9 @@ export const basketSlice = createSlice({
         //------------------------------------------------
         builder.addCase(removeBasketItemAsync.pending, (state, action) => {
             // console.log(action);
-            state.status = 'pendingRemoveItem' + action.meta.arg.productId;//setting the state status to "pending" state
+             
+                state.status = 'pendingRemoveItem' + action.meta.arg.productId+action.meta.arg.name;//setting the state status to "pending" state
+                
         });
 
         builder.addCase(removeBasketItemAsync.fulfilled, (state, action) => {
