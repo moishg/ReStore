@@ -21,7 +21,7 @@ export const history = createBrowserHistory();
 //   "title": "YARC(yet another redux counter)"
 // }
 
-store.dispatch(fetchProductsAsync());
+//store.dispatch(fetchProductsAsync());
 
 ReactDOM.render(
   <React.StrictMode>
