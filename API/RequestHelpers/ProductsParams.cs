@@ -1,6 +1,7 @@
 using System.Security.Cryptography.X509Certificates;
+using API.RequestHelpers;
 
-public class ProductParams
+public class ProductParams:PaginationParams
 {
     public string OrderBy{get;set;}
 

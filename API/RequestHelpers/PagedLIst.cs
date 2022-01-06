@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.RequestHelpers
 {
@@ -23,6 +25,13 @@ namespace API.RequestHelpers
             AddRange(items);
         }
 
-       // public static async Task<PagedList<T>
+        public static async Task<PagedList<T>> ToPagedList(IQueryable<T> query,int pageNumber,int pageSize)
+        {
+            var count=await query.CountAsync();//executing against the db to get the excat count ;
+            var items=await query.Skip((pageNumber=1)*pageSize).Take(pageSize).ToListAsync();
+
+            return new PagedList<T>(items,count,pageNumber,pageSize);
+
+        }
     }
 }
