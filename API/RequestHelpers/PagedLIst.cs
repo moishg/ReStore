@@ -15,23 +15,22 @@ namespace API.RequestHelpers
 
         public PagedList(List<T> items,int count, int pageNumber,int pageSize)
         {
-            MetaData =new MetaData{
+            MetaData =new MetaData{// metadata object
                 TotalCount=count,
                 PageSize=pageSize,
                 CurrentPage=pageNumber,
                 TotalPages=(int)Math.Ceiling(count/(double)pageSize)//calculation that give the correct total pages
             };
 
-            AddRange(items);
+            AddRange(items);//adding the items to the current list 
         }
 
         public static async Task<PagedList<T>> ToPagedList(IQueryable<T> query,int pageNumber,int pageSize)
         {
             var count=await query.CountAsync();//executing against the db to get the excat count ;
-            var items=await query.Skip((pageNumber=1)*pageSize).Take(pageSize).ToListAsync();
+            var items=await query.Skip((pageNumber=1)*pageSize).Take(pageSize).ToListAsync();//if pagesize=10 ,we skip 10 records to get the next 10 records                                                                                                              
 
             return new PagedList<T>(items,count,pageNumber,pageSize);
-
         }
     }
 }
