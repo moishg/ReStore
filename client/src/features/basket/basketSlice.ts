@@ -106,7 +106,7 @@ export const basketSlice = createSlice({
             
             state.status = 'idle';//setting the state status to "idle" state
 
-            console.log(action.payload);
+           // console.log(action.payload);
         });
     })
 })

@@ -27,15 +27,16 @@ namespace API.Controllers
         {
             var query=  _context.Products
             .Sort(productParams.OrderBy)
-            .Search(productParams.SearchTerm)
+             .Search(productParams.SearchTerm)
             .Filter(productParams.Brands,productParams.Types)
             .AsQueryable();
 
+            //var products2=query.ToList<Product>();
             
             var products=await PagedList<Product>.ToPagedList(query,productParams.PageNumber,productParams.PageSize);
             
-            Response.AddPaginationHeader(products.MetaData);
-            //Response.Headers.Add("Pagination",JsonSerializer.Serialize(products.MetaData));
+            //Response.AddPaginationHeader(products.MetaData);
+            Response.Headers.Add("Pagination",JsonSerializer.Serialize(products.MetaData));
 
             return products;
         }
@@ -56,7 +57,12 @@ namespace API.Controllers
         [HttpGet("filters")]
         public async Task<IActionResult> GetFilters()
         {
-                var brands = await _context.Products.Select(p=>p.Brand).Distinct().ToListAsync();
+                List<string> brands = await _context.Products.Select(p=>p.Brand).Distinct().ToListAsync();
+                 List<string> types = await _context.Products.Select(p=>p.Type).Distinct().ToListAsync();
+
+                 var returnVal=new {brands,types};
+                 return Ok(returnVal);
+
                 
         }
     }
