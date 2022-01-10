@@ -1,6 +1,7 @@
 
-import { Box,  Grid, Pagination, Paper,   Typography } from "@mui/material";
+import { Box, Grid, Pagination, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
+import AppPagination from "../../app/components/AppPagination";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
 import CheckBoxButtons from "../../app/components/CheckboxButtons";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
@@ -27,7 +28,7 @@ export default function Catalog() {
   const dispatch = useAppDispatch(); //geeting acess for "dispatch"
 
   //getting data from the redux  store:
-  const { productsLoaded, status, filtersLoaded, brands, types,productParams   } = useAppSelector(state => state.catalog);
+  const { productsLoaded, status, filtersLoaded, brands, types, productParams, metaData } = useAppSelector(state => state.catalog);
 
   useEffect(() => {
 
@@ -46,7 +47,7 @@ export default function Catalog() {
 
 
 
-  if (status.includes('pending')) // using the status for "loading" indicator
+  if (status.includes('pending') || !metaData) // using the status for "loading" indicator
     return <LoadingComponent message='Loading products..' />
   else
     return (
@@ -56,28 +57,28 @@ export default function Catalog() {
             <ProductSearch />
           </Paper>
           <Paper sx={{ mb: 2, p: 2 }}>
-            <RadioButtonGroup 
+            <RadioButtonGroup
               selectedValue={productParams.orderBy}
-              options ={sortOptions}
-              onChange={(e)=>dispatch(setProductParams({orderBy:e.target.value}))}
-            />
-              
-             
-          </Paper>
-          <Paper sx={{ mb: 2, p: 2 }}>
-            <CheckboxButtons 
-              items={brands}
-              checked={productParams.brands}
-              onChange={(items:string[])=>dispatch(setProductParams({brands:items}))}
+              options={sortOptions}
+              onChange={(e) => dispatch(setProductParams({ orderBy: e.target.value }))}
             />
 
-             
+
           </Paper>
           <Paper sx={{ mb: 2, p: 2 }}>
-          <CheckboxButtons 
+            <CheckboxButtons
+              items={brands}
+              checked={productParams.brands}
+              onChange={(items: string[]) => dispatch(setProductParams({ brands: items }))}
+            />
+
+
+          </Paper>
+          <Paper sx={{ mb: 2, p: 2 }}>
+            <CheckboxButtons
               items={types}
               checked={productParams.types}
-              onChange={(items:string[])=>dispatch(setProductParams({types:items}))}
+              onChange={(items: string[]) => dispatch(setProductParams({ types: items }))}
             />
           </Paper>
 
@@ -89,17 +90,10 @@ export default function Catalog() {
 
         <Grid item xs={3} />
         <Grid item xs={9}>
-          <Box display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography>
-              Displaying 1-6 of 20 items
-            </Typography>
-            <Pagination
-              color='secondary'
-              size='large'
-              count={10}
-              page={2}
-            />
-          </Box>
+          <AppPagination
+            metaData={metaData}
+            onPageChange={(page: number) => dispatch(setProductParams({ pageNumber: page }))}
+            />           
         </Grid>
       </Grid>
     )

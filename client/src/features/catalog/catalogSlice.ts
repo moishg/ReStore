@@ -1,15 +1,17 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import agent from "../../app/api/agent";
+import { MetaData } from "../../app/models/pagination";
 import { Product, ProductParams } from "../../app/models/product";
 import { RootState } from "../../app/store/configureStore";
 
 interface CatalogState {
     productsLoaded: boolean;
     filtersLoaded: boolean;
-    status: string,
-    brands: string[],
-    types: string[],
-    productParams: ProductParams
+    status: string;
+    brands: string[];
+    types: string[];
+    productParams: ProductParams;
+    metaData: MetaData | null
 }
 
 const productsAdapter = createEntityAdapter<Product>();
@@ -34,12 +36,17 @@ function getAxiosParams(productParams: ProductParams) {
 
 }
 
-export const fetchProductsAsync = createAsyncThunk<Product[],void,{state:RootState}>(
+export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: RootState }>(
     'catalog/fetchProductsAsync',
     async (_, thunkAPI) => {
-        const params=getAxiosParams(thunkAPI.getState().catalog.productParams)
+        const params = getAxiosParams(thunkAPI.getState().catalog.productParams)
         try {
-            return await agent.Catalog.list(params);//getting the products lists 
+            const response= await agent.Catalog.list(params);//getting the products lists 
+            //console.log(response.metaData);
+            thunkAPI.dispatch(setMetaData(response.metaData));
+            //return response;
+            
+            return response.items;//return the products items  and  updating the redux state
         }
         catch (error: any) {
             //console.log(error); 
@@ -95,12 +102,16 @@ export const catalogSlice = createSlice(
                 pageNumber: 1,
                 pageSize: 6,
                 orderBy: 'name'
-            }
+            },
+            metaData: null
         }),
         reducers: {//reducer functions : 
             setProductParams: (state, action) => {
                 state.productsLoaded = false;//its false cause we want to trigger it with the useEffect
                 state.productParams = { ...state.productParams, ...action.payload }
+            },
+            setMetaData: (state, action) => {
+                state.metaData = action.payload
             },
             resetProductParams: (state) => {//resetting the prodcutParams
                 state.productParams = initParams();
@@ -172,4 +183,4 @@ export const catalogSlice = createSlice(
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);//selecting the "catalog" slice 
 
 
-export const { setProductParams, resetProductParams } = catalogSlice.actions;
+export const { setProductParams, resetProductParams, setMetaData } = catalogSlice.actions;
