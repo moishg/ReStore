@@ -25,11 +25,11 @@ function getAxiosParams(productParams: ProductParams) {
     if (productParams.searchTerm)
         params.append('searchTerm', productParams.searchTerm.toString());
 
-    if (productParams.brands)
+    if (productParams.brands.length>0)
         params.append('brands', productParams.brands.toString());
 
 
-    if (productParams.types)
+    if (productParams.types.length>0)
         params.append('types', productParams.types.toString());
 
     return params;
@@ -85,7 +85,9 @@ function initParams() {
     return {
         pageNumber: 1,
         pageSize: 6,
-        orderBy: 'name'
+        orderBy: 'name',
+        types:[],
+        brands:[]
     }
 }
 
@@ -101,14 +103,21 @@ export const catalogSlice = createSlice(
             productParams: {
                 pageNumber: 1,
                 pageSize: 6,
-                orderBy: 'name'
+                orderBy: 'name',
+                types:[],
+                brands:[]
             },
             metaData: null
         }),
         reducers: {//reducer functions : 
             setProductParams: (state, action) => {
                 state.productsLoaded = false;//its false cause we want to trigger it with the useEffect
+                state.productParams = { ...state.productParams, ...action.payload ,pageNumber:1}
+            },
+            setPageNumber:(state,action)=>{
+                state.productsLoaded=false;
                 state.productParams = { ...state.productParams, ...action.payload }
+
             },
             setMetaData: (state, action) => {
                 state.metaData = action.payload
@@ -183,4 +192,4 @@ export const catalogSlice = createSlice(
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);//selecting the "catalog" slice 
 
 
-export const { setProductParams, resetProductParams, setMetaData } = catalogSlice.actions;
+export const { setProductParams, resetProductParams, setMetaData,setPageNumber } = catalogSlice.actions;
