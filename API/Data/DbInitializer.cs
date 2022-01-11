@@ -1,15 +1,50 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace API.Data
 {
     public static class DbInitializer
     {
-        public static void Initialize( StoreContext context)
+        public static async Task  Initialize( StoreContext context,UserManager<User> userManager)
         {
+            if(userManager.Users.Any()==false)//no users exist
+            {
+                    
+                    //creating the member statndard  user
+                    User user=new User{
+                        UserName="bob",
+                        Email="bob@test.com"
+                    };
+
+                    
+                    await userManager.CreateAsync(user,"Pa$$w0rd");//password policy : 1 uppper case, 1 lower case , special char ,and  1 number"                    
+                    //adding role to the user
+                    await userManager.AddToRoleAsync(user,"Member");//
+
+
+
+                     //creating the admin user
+
+                     User admin=new User{
+                        UserName="admin",
+                        Email="admin@test.com"
+                    };
+
+
+                    await userManager.CreateAsync(admin,"Pa$$w0rd");//password policy : 1 uppper case, 1 lower case , special char ,and  1 number"                    
+                    //adding role to the user
+                    await userManager.AddToRoleAsync(admin,"Admin");//
+
+            }
+
+
+
             if(context.Products.Any())//if products table contains data, skip seeding
             {
                 return;

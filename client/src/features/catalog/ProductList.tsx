@@ -18,8 +18,8 @@ export default function ProductList({ products }: Props) {
                     )
                         :
                         (
-                            
-                             <ProductCard key={product.id} product={product} />
+
+                            <ProductCard key={product.id} product={product} />
                         )
                     }
 
