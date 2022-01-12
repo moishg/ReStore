@@ -32,11 +32,6 @@ namespace API.Data
                 new IdentityRole { Name = "Member", NormalizedName = "MEMBER" },
                 new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" }
             );
-
-
-
-
         }
-
     }
 }

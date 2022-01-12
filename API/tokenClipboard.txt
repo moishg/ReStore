@@ -1,0 +1,14 @@
+bearer
+eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJib2JAdGVzdC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYm9iIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiTWVtYmVyIiwiZXhwIjoxNjQyNjA1ODAyfQ.N0y3o8tP1pQRX97hZr3NNR70YMi-3xUTrg5-b6zUEHVvp11QQckHcFR9m1jPwe8ZzA3Eqd0hKbB9XrMM6zXOrA
+
+
+
+
+
+
+
+
+{
+  "username": "bob",
+  "password": "Pa$$w0rd"
+}

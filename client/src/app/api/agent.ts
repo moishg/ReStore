@@ -101,6 +101,15 @@ const agent={
     Basket
 }
 
+const Account={
+    //"values"  - will contain username and password for passing to server
+    login :(values:any)=>requests.post('account/login',values),
+    register:(values:any)=>requests.post('account/register',values),
+    currentUser:()=>requests.get('account/currentuser')
+
+
+}
+
 
 
 export default agent

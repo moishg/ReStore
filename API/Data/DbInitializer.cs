@@ -35,7 +35,7 @@ namespace API.Data
                         UserName="admin",
                         Email="admin@test.com"
                     };
-
+                    
 
                     await userManager.CreateAsync(admin,"Pa$$w0rd");//password policy : 1 uppper case, 1 lower case , special char ,and  1 number"                    
                     //adding role to the user
