@@ -95,19 +95,19 @@ const Basket={
 
 }
 
-const agent={
-    Catalog,
-    TestErrors,
-    Basket
-}
 
-const Account={
+  const Account={
     //"values"  - will contain username and password for passing to server
     login :(values:any)=>requests.post('account/login',values),
     register:(values:any)=>requests.post('account/register',values),
-    currentUser:()=>requests.get('account/currentuser')
+    currentUser:()=>requests.get('account/currentUser')
+}
 
-
+const agent={
+    Catalog,
+    TestErrors,
+    Basket,
+    Account
 }
 
 
