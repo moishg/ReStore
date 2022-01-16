@@ -13,7 +13,8 @@ export const store=configureStore({
                                     //of type "counterSlice" reducer.
         basket:basketSlice.reducer,
         catalog:catalogSlice.reducer ,
-        account : accountSlice.reducer                        
+        account : accountSlice.reducer
+                                 
     }
 });
 

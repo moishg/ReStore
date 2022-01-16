@@ -22,6 +22,7 @@ import { useAppDispatch } from "../store/configureStore";
 import { setBasket } from "../../features/basket/basketSlice";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 
 export default function App() {    
@@ -31,6 +32,7 @@ const [loading,setLoading]=useState(true);
 
 useEffect(()=>{
   const buyerId=getCookie('buyerId');
+  dispatch(fetchCurrentUser());
   if(buyerId){
     agent.Basket.get()
     //.then(basket=>setBasket(basket))
