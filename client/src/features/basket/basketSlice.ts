@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice, isAnyOf } from "@reduxjs/toolkit"
 import agent from "../../app/api/agent"
 import { Basket } from "../../app/models/basket"
+import { getCookie } from "../../app/util/util"
 
 interface BasketState {
     basket: Basket | null, //basket is of type "Basket" , or null 
@@ -12,30 +13,51 @@ const initialState: BasketState = {
     basket: null,
     status: 'idle'
 }
+export const fetchBasketAsync = createAsyncThunk<Basket>(
+    'basket/fetchBasketAsync',
+    async (_, thunkAPI) => {
+        try {
+            return await agent.Basket.get();
+        }
+        catch (error:any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    },
+    {
+        condition: ()=>{
+            if(!getCookie('buyerId'))
+            {
+                return false;
+            }
+        }
+    }
+)
+
+
 
 //creaing addBasket item ,but wih asynchronic
 export const addBasketItemAsync = createAsyncThunk<Basket, { productId: number, quantity?: number }>(
     'basket/addBasketItemAsync',//funnction string identifier(type prefix)
-    async ({ productId, quantity = 1 },thunkAPI) => {
+    async ({ productId, quantity = 1 }, thunkAPI) => {
         try {
             return await agent.Basket.addItem(productId, quantity);
         }
-        catch (error:any) {
+        catch (error: any) {
             //console.log(error);
-            return  thunkAPI.rejectWithValue({error:error.data});            
+            return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
 )
 
 export const removeBasketItemAsync = createAsyncThunk<void, { productId: number, quantity: number, name?: string }>(
     'basket/removeBasketItemAsync',//function string identifier(type prefix)
-    async ({ productId, quantity = 1 },thunkAPI) => {
+    async ({ productId, quantity = 1 }, thunkAPI) => {
         try {
             await agent.Basket.removeItem(productId, quantity);
         }
-        catch (error:any) {
+        catch (error: any) {
             //console.log(error);
-            return  thunkAPI.rejectWithValue({error:error.data});            
+            return thunkAPI.rejectWithValue({ error: error.data });
         }
     }
 )
@@ -68,15 +90,7 @@ export const basketSlice = createSlice({
             //console.log(action);
             state.status = 'pendingAddItem' + action.meta.arg.productId;//setting the state status to "pending" state
         });
-        builder.addCase(addBasketItemAsync.fulfilled, (state, action) => {
-            // console.log(action);
-            state.basket = action.payload;
-            state.status = 'idle';//setting the state status to "fulfilled" state
-        });
-        builder.addCase(addBasketItemAsync.rejected, (state, action) => {
-             console.log(action.payload);
-            state.status = 'idle';//setting the state status to "rejected" state
-        });
+       
         //------------------------------------------------
         //cases for :removeBasketItemAsync async  method
         //------------------------------------------------
@@ -102,11 +116,19 @@ export const basketSlice = createSlice({
 
         });
 
-        builder.addCase(removeBasketItemAsync.rejected, (state,action) => {
-            
+        builder.addCase(removeBasketItemAsync.rejected, (state, action) => {
             state.status = 'idle';//setting the state status to "idle" state
+            // console.log(action.payload);
+        });
 
-           // console.log(action.payload);
+        builder.addMatcher(isAnyOf(addBasketItemAsync.fulfilled,fetchBasketAsync.fulfilled) ,(state, action) => {
+            // console.log(action);
+            state.basket = action.payload;
+            state.status = 'idle';//setting the state status to "fulfilled" state
+        });
+        builder.addMatcher(isAnyOf(addBasketItemAsync.rejected,fetchBasketAsync.rejected), (state, action) => {             
+            state.status = 'idle';//setting the state status to "rejected" state
+            console.log(action.payload);
         });
     })
 })
