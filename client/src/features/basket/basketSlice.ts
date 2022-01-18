@@ -68,18 +68,10 @@ export const basketSlice = createSlice({
     reducers: {//creating the reducers: - passing the "state" and "action" as arguments:
         setBasket: (state, action) => {
             state.basket = action.payload
-        },
-        // removeItem: (state, action) => {
-        //     const { productId, quantity } = action.payload;
-        //     const itemIndex = state.basket?.items.findIndex(i => i.productId == productId);
-        //     if (itemIndex === -1 || itemIndex === undefined) return;
-        //     else {
-        //         state.basket!.items[itemIndex].quantity -= quantity;
-        //         if (state.basket?.items[itemIndex].quantity === 0) {
-        //             state.basket.items.splice(itemIndex, 1);//removing the item itself from the items list in the basket
-        //         }
-        //     }
-        // }
+        },       
+        clearBasket:(state)=>{
+            state.basket=null;
+        }
     },
     //adding extra reduces:
     extraReducers: (builder => {
@@ -134,4 +126,4 @@ export const basketSlice = createSlice({
 })
 
 
-export const { setBasket } = basketSlice.actions;
+export const { setBasket ,clearBasket} = basketSlice.actions;

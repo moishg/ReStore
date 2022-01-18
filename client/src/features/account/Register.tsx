@@ -14,26 +14,32 @@ import { useAppDispatch } from '../../app/store/configureStore';
 import agent from '../../app/api/agent';
 import { useState } from 'react';
 import { setDefaultResultOrder } from 'dns/promises';
+import { toast } from 'react-toastify';
 
 
 export default function Register() {
 
-  //const history = useHistory();   
-  
-  const { register,setError, handleSubmit, formState: { isSubmitting, errors, isValid } } = useForm({
+  const history = useHistory();   
+
+  const { register, setError, handleSubmit,formState: { isSubmitting, errors, isValid } } = useForm({
     mode: 'all'
   });
 
-    function handleApiErrors(errors:any){
-     if(errors)
-     {
-       errors.forEach((error:string)=>{
-         if(error.includes('Password')){
-            setError('password',{message:error})            
-         }
-       })
-     }
+  function handleApiErrors(errors: any) {
+    if (errors) {
+      errors.forEach((error: string) => {
+        if (error.includes('Password')) {
+          setError('password', { message: error })
+        }
+        else if (error.includes('Email')) {
+          setError('email', { message: error })
+        }
+        else if (error.includes('UserName')) {
+          setError('username', { message: error })
+        }
+      })
     }
+  }
 
   return (
     <Container component={Paper} maxWidth="sm" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p: 4 }} >
@@ -44,7 +50,12 @@ export default function Register() {
         Register
       </Typography>
       <Box component="form"
-        onSubmit={handleSubmit((data) => agent.Account.register(data).catch(error => handleApiErrors(error)))} noValidate sx={{ mt: 1 }}>
+        onSubmit={handleSubmit((data) => agent.Account.register(data)
+          .then(() => {
+            toast.success('Registration successful -you can now login ');
+            history.push('/login');
+          })
+          .catch(error => handleApiErrors(error)))} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           fullWidth
@@ -58,7 +69,13 @@ export default function Register() {
           margin="normal"
           fullWidth
           label="Email Address"
-          {...register('email', { required: 'Email is required' })}
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/,
+              message: 'Not a valid email address'
+            }
+          })}
           error={!!errors.email}
           helperText={errors?.email?.message}
         />
@@ -67,7 +84,13 @@ export default function Register() {
           fullWidth
           label="Password"
           type="password"
-          {...register('password', { required: 'Password is required' })}
+          {...register('password', {
+            required: 'Password is required',
+            pattern: {
+              value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
+              message: 'password does not meet complexity requirements'
+            }
+          })}
           error={!!errors.password}
           helperText={errors?.password?.message}
         />
@@ -105,4 +128,3 @@ export default function Register() {
   );
 }
 
- 

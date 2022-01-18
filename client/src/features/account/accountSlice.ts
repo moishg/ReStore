@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { history } from "../..";
 import agent from "../../app/api/agent";
 import { User } from "../../app/models/user";
+import { setBasket } from "../basket/basketSlice";
 
 
 interface AccountState { // interfacfe for account  state
@@ -19,8 +20,13 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     'account/signInUser',
     async (data, thunkAPI) => {
         try {
-            const user = await agent.Account.login(data);
-            console.log(user);
+            const userDto = await agent.Account.login(data);
+              //when loggin  'if user  has basket , updating the "basket" state in the redux store 
+            const { basket, ...user } = userDto;
+            if (basket) {
+                thunkAPI.dispatch(setBasket(basket));
+            }
+            //console.log(user);
             localStorage.setItem('user', JSON.stringify(user));
             return user;
         }
@@ -35,8 +41,12 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     async (data, thunkAPI) => {
         thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)));
         try {
-            const user = await agent.Account.currentUser();
-            console.log(user);
+            const userDto = await agent.Account.currentUser();
+            const { basket, ...user } = userDto;
+            //when loading the user,if has basket , updating the "basket" state in the redux store 
+            if (basket) {
+                thunkAPI.dispatch(setBasket(basket));
+            }
             localStorage.setItem('user', JSON.stringify(user));//replacing the user with updated token from the api
             return user;
         }
@@ -77,7 +87,8 @@ export const accountSlice = createSlice({
             state.user = action.payload;
         });
         builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state, action) => {
-            console.log(action.payload);
+           // console.log(action.payload);
+           throw action.payload;
         });
     })
 })
