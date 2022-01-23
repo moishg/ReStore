@@ -24,6 +24,7 @@ import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import PrivateRoute from "./PrivateRoute";
+import Orders from "../../features/orders/Orders";
 
 
 export default function App() {
@@ -81,6 +82,7 @@ export default function App() {
             <PrivateRoute path='/checkout' component={CheckoutPage} />
             <Route path='/login' component={Login} />
             <Route path='/register' component={Register} />
+            <Route path='/orders' component={Orders} />
 
             <Route component={NotFound} />
 

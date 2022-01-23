@@ -85,7 +85,7 @@ namespace API.Controllers
 
 
 
-        [HttpPost("register")] 
+        [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
         {
             User user = new User
@@ -119,18 +119,29 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);//  the "Name" claim from the token
 
-            Basket userBasket=await RetrieveBasket(User.Identity.Name);
+            Basket userBasket = await RetrieveBasket(User.Identity.Name);
 
             UserDto userDto = new UserDto()
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
-                Basket=userBasket?.MapBasketToDto()
+                Basket = userBasket?.MapBasketToDto()
             };
 
             return userDto;
         }
 
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+          UserAddress result= await _userManager.Users
+            .Where(x => x.UserName == User.Identity.Name)
+            .Select(user => user.Address)
+            .FirstOrDefaultAsync();
+
+            return result;
+        }
         private async Task<Basket> RetrieveBasket(string buyerId)
         {
             if (string.IsNullOrEmpty(buyerId))
