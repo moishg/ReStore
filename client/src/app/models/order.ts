@@ -20,7 +20,7 @@ export interface Order {
     id: number;
     buyerId: string;
     shippingAddress: ShippingAddress;
-    orderDate: Date;
+    orderDate: string;
     orderItems: OrderItem[];
     subtotal: number;
     deliveryFee: number;

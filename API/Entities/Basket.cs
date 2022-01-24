@@ -12,7 +12,8 @@ namespace API.Entities
 
         //basketId-BasketItemId===>1:n
         public List<BasketItem> Items { get; set; } = new();//===new List<BasketItem>();
-
+        public string PaymentIntentId { get; set; }
+        public string ClientSecret { get; set; }
         public void AddItem(Product product, int quantity)
         {
             //if we dont have the product in the baseket, add new one , elese ,incraease the quntity of the product
@@ -24,11 +25,11 @@ namespace API.Entities
                     Quantity = quantity
                 };
 
-                Items.Add(basketItem);               
+                Items.Add(basketItem);
             }
-            else 
+            else
             {
-                 BasketItem existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
+                BasketItem existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
                 if (existingItem != null)
                 {
                     existingItem.Quantity += quantity;
@@ -36,22 +37,22 @@ namespace API.Entities
             }
         }
 
-        public void RemoveItem(int productId,int quantity)
+        public void RemoveItem(int productId, int quantity)
         {
-            var item=Items.FirstOrDefault(basketItem=>basketItem.Product.Id==productId);
-            if(item==null)//productId not exists
+            var item = Items.FirstOrDefault(basketItem => basketItem.Product.Id == productId);
+            if (item == null)//productId not exists
             {
-                return;  
+                return;
             }
             else//product exists
             {
-                item.Quantity-=quantity;//subtract the quantity
-                if(item.Quantity==0)//removing the product if quantity==0
+                item.Quantity -= quantity;//subtract the quantity
+                if (item.Quantity == 0)//removing the product if quantity==0
                 {
                     Items.Remove(item);
                 }
             }
-            
+
 
 
 

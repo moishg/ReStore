@@ -7,13 +7,15 @@ namespace API.DTOs//data transfer objects
 {
     public class BasketDto
     {
-        public int Id{get;set;}
+        public int Id { get; set; }
 
-        public string BuyerId{get;set;}
+        public string BuyerId { get; set; }
 
-        public List<BasketItemDto> Items{get;set;}
+        public List<BasketItemDto> Items { get; set; }
 
+        public string PaymentIntentId { get; set; }
 
+        public string ClientSecret { get; set; }
 
     }
 }

@@ -19,13 +19,14 @@ export default function PaymentForm() {
                      <AppTextInput name='nameOnCard' label='Name on Card' control={control} /> 
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <TextField
-                        //required
+                    <TextField                        
                         id="cardNumber"
                         label="Card number"
                         fullWidth
                         autoComplete="cc-number"
                         variant="standard"
+                        InputLabelProps={{shrink:true}}
+                        InputProps={{}}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>

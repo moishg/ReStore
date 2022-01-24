@@ -103,6 +103,8 @@ namespace API
 
             services.AddScoped<TokenService>();//scoped: the "TokenService"  will be available only until the request ends
 
+            services.AddScoped<PaymentService>();    
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
