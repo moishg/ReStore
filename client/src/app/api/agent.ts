@@ -1,5 +1,6 @@
 
 import axios, { AxiosError, AxiosResponse } from "axios";
+import { request } from "http";
 import { toast } from "react-toastify";
 import { history } from "../..";
 import { PaginatedResponse } from "../models/pagination";
@@ -123,14 +124,20 @@ const Orders={
 
 }
 
+const Payments={
+    createPaymentIntent:()=>requests.post('payments',{})
+}
+
 const agent = {
     Catalog,
     TestErrors,
     Basket,
     Account,
-    Orders
+    Orders,
+    Payments
 }
 
+ 
 
 
 export default agent

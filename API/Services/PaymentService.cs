@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Stripe;
 
@@ -36,7 +37,9 @@ namespace API.Services
                     PaymentMethodTypes = new List<string> { "card" }
                 };
 
-               
+               paymentIntent=await service.CreateAsync(options);
+               basket.PaymentIntentId=paymentIntent.Id;
+               basket.ClientSecret=paymentIntent.ClientSecret;
             }
             else
             {

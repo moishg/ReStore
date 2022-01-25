@@ -14,6 +14,8 @@
         id: number;
         buyerId: string;
         items: BasketItem[];
+        paymentItemId?:string;
+        clientSecret?:string;
     }
 
     export interface BasketSummaryProps{
