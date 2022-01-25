@@ -26,7 +26,9 @@ export default function PaymentForm() {
                         autoComplete="cc-number"
                         variant="standard"
                         InputLabelProps={{shrink:true}}
-                        InputProps={{}}
+                        InputProps={{
+                            
+                        }}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
