@@ -4,6 +4,7 @@ import agent from "../../app/api/agent";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { Order } from '../../app/models/order';
 import { currencyFormat } from "../../app/util/util";
+import OrderDetailed from "./DetailedOrder";
 import OrderDetails from "./OrderDetails";
 
 export default function Orders() {
@@ -20,6 +21,14 @@ export default function Orders() {
     if (loading) {
         return <LoadingComponent message='loading orders...' />
     }
+
+    if(selectedOrderNumber>0)
+      return (
+          <OrderDetailed  
+            order={orders?.find(o=>o.id===selectedOrderNumber)!  }
+            setSelectedOrder={setSelectedOrderNumber} //padding the function to set to the local state
+          /> 
+      )
 
     return (
         <>
@@ -55,10 +64,11 @@ export default function Orders() {
                 </Table>
             </TableContainer >
 
-        if({selectedOrderNumber>0} )
+        {/* if({selectedOrderNumber>0} )
             {
                  <OrderDetails order={orders?.find(o=>o.id===selectedOrderNumber)!} />
-            }
+            } */}
+
         </>
     )
 }

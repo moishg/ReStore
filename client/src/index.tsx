@@ -6,16 +6,19 @@ import reportWebVitals from './reportWebVitals';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from "history";
 import { StoreProvider } from './app/context/StoreContext';
- 
+
 import { Provider } from 'react-redux';
- 
+
 import { store } from './app/store/configureStore';
 import { fetchProductsAsync } from './features/catalog/catalogSlice';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 export const history = createBrowserHistory();
 
- 
 
- //console.log(store.getState());//getting the data of the redux store
+
+//console.log(store.getState());//getting the data of the redux store
 //  {
 //   "data": 42,
 //   "title": "YARC(yet another redux counter)"
@@ -27,9 +30,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
       {/* <StoreProvider>   -  for using the storeContext */}
-        <Provider store={store}>
-          <App />
-        </Provider>
+      <Provider store={store}>
+        <App />
+      </Provider>
       {/* </StoreProvider> */}
     </Router>
   </React.StrictMode>,

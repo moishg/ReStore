@@ -20,6 +20,7 @@
 
     export interface BasketSummaryProps{
         basketItems: BasketItem[];
+        subtotal?:number;
     }
 
  
