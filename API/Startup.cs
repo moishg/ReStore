@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
 using API.Middleware;
+using API.RequestHelpers;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -38,6 +39,8 @@ namespace API
         {
 
             services.AddControllers();
+
+            services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
             services.AddSwaggerGen(c =>
             {
@@ -103,8 +106,8 @@ namespace API
 
             services.AddScoped<TokenService>();//scoped: the "TokenService"  will be available only until the request ends
 
-            services.AddScoped<PaymentService>();    
-            
+            services.AddScoped<PaymentService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -123,6 +126,11 @@ namespace API
 
             app.UseRouting();
 
+            app.UseDefaultFiles();
+
+            app.UseStaticFiles();
+
+
             app.UseCors(opt =>
             {
                 opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
@@ -135,6 +143,8 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }

@@ -8,25 +8,29 @@ import { store } from "../store/configureStore";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
+//axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.baseURL = 'http://localhost:5003/api/';
 axios.defaults.withCredentials = true;//the briowser will receive the cookie and set it in the app storage 
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.request.use(config => {
+
     const token = store.getState().account.user?.token;
-    if (token )
-    { 
-      //  console.log('headers',config.headers);
+    if (token) {
+        //  console.log('headers',config.headers);
         config.headers!.Authorization = `Bearer ${token}`;
     }
-     
+
 
     return config;
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep();
+    if (process.env.MODE_ENGE === 'development') {//well make delay only in 'development' mode
+        await sleep();
+    }
+
     const pagination = response.headers['pagination'];// axios params must be small letter    
     // console.log("response.headers:" , response.headers['date']);
     if (pagination) {
@@ -52,7 +56,7 @@ axios.interceptors.response.use(async response => {
             toast.error(data.title);
             break;
         case 401:
-            toast.error(data.title);                 
+            toast.error(data.title);
             break;
         case 500:
             history.push({
@@ -113,19 +117,19 @@ const Account = {
     login: (values: any) => requests.post('account/login', values),
     register: (values: any) => requests.post('account/register', values),
     currentUser: () => requests.get('account/currentUser'),
-    fetchAddress:()=>requests.get('account/savedAddress')
+    fetchAddress: () => requests.get('account/savedAddress')
 }
 
-const Orders={
-    list:()=>requests.get('orders'),
-    fetch:(id:number)=>requests.get( `orders/${id}`),
-    create:(values:any)=>requests.post('orders',values)
+const Orders = {
+    list: () => requests.get('orders'),
+    fetch: (id: number) => requests.get(`orders/${id}`),
+    create: (values: any) => requests.post('orders', values)
 
 
 }
 
-const Payments={
-    createPaymentIntent:()=>requests.post('payments',{})
+const Payments = {
+    createPaymentIntent: () => requests.post('payments', {})
 }
 
 const agent = {
@@ -137,7 +141,7 @@ const agent = {
     Payments
 }
 
- 
+
 
 
 export default agent
