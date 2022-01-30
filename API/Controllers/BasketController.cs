@@ -8,12 +8,14 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extentions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [AllowAnonymous]
     public class BasketController : BaseApiController
     {
         private readonly StoreContext _context;

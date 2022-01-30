@@ -25,6 +25,7 @@ import { fetchCurrentUser } from "../../features/account/accountSlice";
 import PrivateRoute from "./PrivateRoute";
 import Orders from "../../features/orders/Orders";
 import CheckoutWrapper from "../../features/Checkout/CheckoutWrapper";
+import Inventory from "../../features/admin/inventory";
 
 
 export default function App() {
@@ -84,6 +85,7 @@ export default function App() {
               <Route path='/login' component={Login} />
               <Route path='/register' component={Register} />
               <Route path='/orders' component={Orders} />
+              <Route path='/inventory' component={Inventory} />
               <Route component={NotFound} />
             </Switch>
           </Container>

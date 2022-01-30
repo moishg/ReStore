@@ -1,15 +1,16 @@
 
 import { Box, Grid, Pagination, Paper, Typography } from "@mui/material";
-import { useEffect } from "react";
+ 
 import AppPagination from "../../app/components/AppPagination";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
-import CheckBoxButtons from "../../app/components/CheckboxButtons";
+ 
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 
 import LoadingComponent from "../../app/layout/LoadingComponent";
 
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchFilters, fetchProductsAsync, productSelectors, setPageNumber, setProductParams } from "./catalogSlice";
+import useProducts from "../../hooks/useProducts";
+import {   setPageNumber, setProductParams } from "./catalogSlice";
 import ProductList from "./ProductList";
 import ProductSearch from "./productSearch";
 
@@ -20,32 +21,13 @@ const sortOptions = [
   { value: 'price', label: 'Price - Low to high' }
 ]
 
-
 export default function Catalog() {
-  const products = useAppSelector(productSelectors.selectAll);
-
-  //console.log(products);
+  const { products, filtersLoaded, brands, types, metaData } = useProducts();
+  
   const dispatch = useAppDispatch(); //geeting acess for "dispatch"
 
   //getting data from the redux  store:
-  const { productsLoaded, status, filtersLoaded, brands, types, productParams, metaData } = useAppSelector(state => state.catalog);
-
-  useEffect(() => {
-
-    if (!productsLoaded) //if products not loaded, activate dispatch  for fetching products to the  "products" list  object
-      dispatch(fetchProductsAsync());
-
-  }, [productsLoaded, dispatch]); //[] - for only to becalled once 
-
-  useEffect(() => {
-
-    if (!filtersLoaded)
-      dispatch(fetchFilters());
-
-  }, [dispatch, filtersLoaded]); //[] - for only to becalled once 
-
-
-
+  const { productParams } = useAppSelector(state => state.catalog);
 
   if (!filtersLoaded || !metaData) // using the status for "loading" indicator
     return <LoadingComponent message='Loading products..' />
@@ -89,11 +71,11 @@ export default function Catalog() {
         </Grid>
 
         <Grid item xs={3} />
-        <Grid item xs={9} sx={{mb:2}}>
+        <Grid item xs={9} sx={{ mb: 2 }}>
           <AppPagination
             metaData={metaData}
             onPageChange={(page: number) => dispatch(setPageNumber({ pageNumber: page }))}
-            />           
+          />
         </Grid>
       </Grid>
     )

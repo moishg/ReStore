@@ -38,6 +38,7 @@ export default function Header({ darkMode, handleThemeChange }: HeaderProps) {
 
     //const{basket}=useStoreContext(); 
     const { basket } = useAppSelector(state => state.basket);//selecting the "basket" redux state  - only getting the data with no actions here
+    console.log('basket',basket);
     const { user } = useAppSelector(state => state.account);
 
     const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
@@ -64,6 +65,15 @@ export default function Header({ darkMode, handleThemeChange }: HeaderProps) {
                             {title.toUpperCase()}
                         </ListItem>
                     ))}
+                    {user &&
+                        <ListItem
+                            component={NavLink}
+                            to={'/inventory'}
+                            sx={navStyles}
+                        >
+                            INVENTORY
+                        </ListItem>
+                    }
                 </List>
                 <Box display='flex' alignItems='center'>
                     <IconButton component={Link} to='/basket' size='large' sx={{ color: 'inherit' }}>
