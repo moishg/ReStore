@@ -28,14 +28,14 @@ export default function Inventory() {
     }
 
     if (editMode) {
-        return <ProductForm product = { selectedProduct } cancelEdit = { cancelEdit } />
+        return <ProductForm product={selectedProduct} cancelEdit={cancelEdit} />
     }
 
     return (
         <>
             <Box display='flex' justifyContent='space-between'>
                 <Typography sx={{ p: 2 }} variant='h4'>Inventory</Typography>
-                <Button sx={{ m: 2 }} size='large' variant='contained'>Create</Button>
+                <Button  onClick={()=>setEditMode(true)} sx={{ m: 2 }} size='large' variant='contained'>Create</Button>
             </Box>
             <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -70,8 +70,8 @@ export default function Inventory() {
                                 <TableCell align="center">{product.brand}</TableCell>
                                 <TableCell align="center">{product.quantityInStock}</TableCell>
                                 <TableCell align="right">
-                                    <Button startIcon={<Edit />} />
-                                    <Button startIcon={<Delete />} color='error' />
+                                    <Button onClick={() => handleSelectProduct(product)} startIcon={<Edit />} />
+                                    <Button startIcon={<Delete />} color='error' />                                     
                                 </TableCell>
                             </TableRow>
                         ))}
