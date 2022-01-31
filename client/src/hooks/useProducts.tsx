@@ -11,15 +11,13 @@ export default function useProducts(){
     //getting data from the redux  store:
     const { productsLoaded, filtersLoaded, brands, types, metaData } = useAppSelector(state => state.catalog);
   
-    useEffect(() => {
-  
+    useEffect(() => {  
       if (!productsLoaded) //if products not loaded, activate dispatch  for fetching products to the  "products" list  object
         dispatch(fetchProductsAsync());
   
     }, [productsLoaded, dispatch]); //[] - for only to becalled once 
   
-    useEffect(() => {
-  
+    useEffect(() => {  
       if (!filtersLoaded)
         dispatch(fetchFilters());
   

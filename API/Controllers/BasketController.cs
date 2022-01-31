@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
+    
     public class BasketController : BaseApiController
     {
         private readonly StoreContext _context;
