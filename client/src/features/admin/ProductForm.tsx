@@ -1,8 +1,10 @@
 import { Typography, Grid, Paper, Box, Button } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import AppSelectList from "../../app/components/AppSelectList";
 import AppTextInput from "../../app/components/AppTextInput";
 import { Product, ProductParams } from "../../app/models/product";
+import useProducts from "../../hooks/useProducts";
 
 
 interface Props {
@@ -12,6 +14,7 @@ interface Props {
 
 export default function ProductForm({ product, cancelEdit }: Props) {
     const { control, reset } = useForm();
+    const {brands,types}=useProducts();
 
     useEffect(() => {
         if (product) {
@@ -26,13 +29,13 @@ export default function ProductForm({ product, cancelEdit }: Props) {
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} sm={12}>
-                    <AppTextInput control={control} name='name' label='Product name' />
+                    <AppTextInput control={control}  name='name' label='Product name' />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <AppTextInput control={control} name='brand' label='Brand' />
+                    <AppSelectList control={control} items={brands}  name='brand' label='Brand' />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <AppTextInput control={control} name='type' label='Type' />
+                    <AppSelectList control={control}  items={types}  name='type' label='Type' />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <AppTextInput control={control} name='price' label='Price' />
