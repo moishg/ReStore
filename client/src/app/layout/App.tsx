@@ -82,10 +82,11 @@ export default function App() {
               <Route path='/server-error' component={ServerError} />
               <Route path='/basket' component={BasketPage} />
               <PrivateRoute path='/checkout' component={CheckoutWrapper} />
+              <PrivateRoute path='/orders' component={Orders} />
+              <PrivateRoute roles={['Admin']} path='/inventory' component={Inventory} />
               <Route path='/login' component={Login} />
-              <Route path='/register' component={Register} />
-              <Route path='/orders' component={Orders} />
-              <Route path='/inventory' component={Inventory} />
+              <Route path='/register' component={Register} />               
+              
               <Route component={NotFound} />
             </Switch>
           </Container>

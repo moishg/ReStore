@@ -21,7 +21,7 @@ export const signInUser = createAsyncThunk<User, FieldValues>(
     async (data, thunkAPI) => {
         try {
             const userDto = await agent.Account.login(data);
-              //when loggin  'if user  has basket , updating the "basket" state in the redux store 
+            //when loggin  'if user  has basket , updating the "basket" state in the redux store 
             const { basket, ...user } = userDto;
             if (basket) {
                 thunkAPI.dispatch(setBasket(basket));
@@ -73,6 +73,10 @@ export const accountSlice = createSlice({
         },
         setUser: (state, action) => {
             state.user = action.payload;
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+            //"http://schemas.microsoft.com/ws/2008/06/identity/claim"   is the  the user "roles  key for his "claims" array
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            state.user = { ...action.payload, roles: typeof(roles) === 'string' ? [roles] : roles };             
         }
     },
     extraReducers: (builder => {//using the same case for the 2 different methods - becuase both of thee cases return the same object type("user")  we can use "addMatcher()"
@@ -84,11 +88,17 @@ export const accountSlice = createSlice({
             history.push('/');
         })
         builder.addMatcher(isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled), (state, action) => {
-            state.user = action.payload;
+            let claims = JSON.parse(atob(action.payload.token.split('.')[1]));
+            //"http://schemas.microsoft.com/ws/2008/06/identity/claim"   is the  the user "roles  key for his "claims" array
+            let roles = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+
+            state.user = { ...action.payload, roles: typeof(roles) === 'string' ? [roles] : roles };
         });
         builder.addMatcher(isAnyOf(signInUser.rejected, fetchCurrentUser.rejected), (state, action) => {
-           // console.log(action.payload);
-           throw action.payload;
+            // console.log(action.payload);
+            throw action.payload;
+
+
         });
     })
 })

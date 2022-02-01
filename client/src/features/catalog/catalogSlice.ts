@@ -25,11 +25,11 @@ function getAxiosParams(productParams: ProductParams) {
     if (productParams.searchTerm)
         params.append('searchTerm', productParams.searchTerm.toString());
 
-    if (productParams.brands.length>0)
+    if (productParams.brands.length > 0)
         params.append('brands', productParams.brands.toString());
 
 
-    if (productParams.types.length>0)
+    if (productParams.types.length > 0)
         params.append('types', productParams.types.toString());
 
     return params;
@@ -41,11 +41,11 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: Roo
     async (_, thunkAPI) => {
         const params = getAxiosParams(thunkAPI.getState().catalog.productParams)
         try {
-            const response= await agent.Catalog.list(params);//getting the products lists 
+            const response = await agent.Catalog.list(params);//getting the products lists 
             //console.log(response.metaData);
             thunkAPI.dispatch(setMetaData(response.metaData));
             //return response;
-            
+
             return response.items;//return the products items  and  updating the redux state
         }
         catch (error: any) {
@@ -86,8 +86,8 @@ function initParams() {
         pageNumber: 1,
         pageSize: 6,
         orderBy: 'name',
-        types:[],
-        brands:[]
+        types: [],
+        brands: []
     }
 }
 
@@ -104,27 +104,38 @@ export const catalogSlice = createSlice(
                 pageNumber: 1,
                 pageSize: 6,
                 orderBy: 'name',
-                types:[],
-                brands:[]
+                types: [],
+                brands: []
             },
             metaData: null
         }),
         reducers: {//reducer functions : 
             setProductParams: (state, action) => {
                 state.productsLoaded = false;//its false cause we want to trigger it with the useEffect
-                state.productParams = { ...state.productParams, ...action.payload ,pageNumber:1}
+                state.productParams = { ...state.productParams, ...action.payload, pageNumber: 1 }
             },
-            setPageNumber:(state,action)=>{
-                state.productsLoaded=false;
+            setPageNumber: (state, action) => {
+                state.productsLoaded = false;
                 state.productParams = { ...state.productParams, ...action.payload }
 
             },
             setMetaData: (state, action) => {
-                state.metaData = action.payload
+                state.metaData = action.payload//the payload will contain the "paging" metadata ( currentPage,totalPages, pageSize,totalCount )
+
+
             },
             resetProductParams: (state) => {//resetting the prodcutParams
                 state.productParams = initParams();
+            },
+            setProduct: (state, action) => {
+                productsAdapter.upsertOne(state, action.payload);// the payload will contain the product data (id,number,descrition,type ,brand, price, pictureUrl..)
+                state.productsLoaded = false;
+            },
+            removeProduct: (state, action) => {
+                productsAdapter.removeOne(state, action.payload)//the payload will contain the "id" of the product
+                state.productsLoaded = false;
             }
+
         },
         extraReducers: (builder => {
             //----------------------------------------------------------
@@ -184,12 +195,10 @@ export const catalogSlice = createSlice(
                 state.status = 'idle';//setting the state status to "rejected" state
                 console.log(action.payload);
             });
-
-
         })
     })
 
 export const productSelectors = productsAdapter.getSelectors((state: RootState) => state.catalog);//selecting the "catalog" slice 
 
 
-export const { setProductParams, resetProductParams, setMetaData,setPageNumber } = catalogSlice.actions;
+export const { setProductParams, resetProductParams, setMetaData, setPageNumber, setProduct, removeProduct } = catalogSlice.actions;

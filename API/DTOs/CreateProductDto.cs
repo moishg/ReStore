@@ -9,6 +9,8 @@ namespace API.DTOs
 {
     public class CreateProductDto
     {
+         public int Id { get; set; }
+         
         [Required]
         public string Name { get; set; }
         [Required]

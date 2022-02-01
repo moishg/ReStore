@@ -134,20 +134,19 @@ namespace API.Controllers
                 product.PublicId = imageResult.PublicId;
             }
 
-
-
-
-
             bool result = await _context.SaveChangesAsync() > 0;
             if (result)
             {
-                return Ok(product);
+             //   return Ok(product);
             }
             else
             {
-                return BadRequest(new ProblemDetails { Title = "Problem updating the  product" });
+              //  return BadRequest(new ProblemDetails { Title = "Problem updating the  product" });
             }
+
+             return Ok(product);
         }
+
 
 
         [Authorize(Roles = "Admin")]
