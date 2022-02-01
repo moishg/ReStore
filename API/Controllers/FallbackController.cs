@@ -13,10 +13,10 @@ namespace API.Controllers
     {
         public IActionResult Index()
         {
-            //string indexFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
+            string indexFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
 
-            var parentDir=Directory.GetParent(Directory.GetCurrentDirectory());
-            string indexFileLocation = Path.Combine(parentDir.FullName ,"client", "build", "index.html");
+            //var parentDir=Directory.GetParent(Directory.GetCurrentDirectory());
+            //string indexFileLocation = Path.Combine(parentDir.FullName ,"client", "build", "index.html");
 
 
             return PhysicalFile(indexFileLocation, "text/HTML");
