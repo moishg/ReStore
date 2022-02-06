@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,9 +12,10 @@ namespace API.Entities.OrderAggregate
 
         public string BuyerId { get; set; }
 
+        [Required]
         public ShippingAddress ShippingAddress { get; set; }
 
-        public DateTime OrderDate { get; set; } = DateTime.Now;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         public List<OrderItem> OrderItems { get; set; }
 
