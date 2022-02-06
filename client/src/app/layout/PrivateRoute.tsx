@@ -19,9 +19,9 @@ export default function PrivateRoute({ component: Component, roles, ...rest }: P
           {
             return <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
           }
-          else if (!roles?.some(r => user.roles?.includes(r))) {
-            toast.error('The current user not authorized to access this area');
-            return <Redirect to={{ pathname: "/catalog", state: { from: props.location } }} />
+          else if (roles && !roles?.some(r => user.roles?.includes(r))) {
+            toast.error('Not authorised to access this area');
+            return <Redirect to={{ pathname: "/catalog" }} />
           }
           else {
             return <Component {...props} />;
